@@ -6,7 +6,7 @@ C_DOWN=""
 C_END=""
 
 case ${TERM} in
-	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen)
+	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
 		C_UP='\e[1;32m'
 		C_DOWN='\e[1;31m'
 		C_END='\e[0m'
