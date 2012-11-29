@@ -1,0 +1,59 @@
+#!/bin/bash
+
+lxcpath=/var/lib/lxc
+C_UP=""
+C_DOWN=""
+C_END=""
+
+case ${TERM} in
+	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen)
+		C_UP='\e[1;32m'
+		C_DOWN='\e[1;31m'
+		C_END='\e[0m'
+esac
+
+if [ ! -r $lxcpath ]; then
+    exit 0
+fi
+
+
+active=$(netstat -xa | grep $lxcpath | \
+	sed -e 's#.*'"$lxcpath/"'\(.*\)/command#\1#');
+
+names=$(cd $lxcpath; for id in *;do [ -d "$id" ] && echo $id ; done; cd - >/dev/null)
+gen_groups() {
+	for n in ${names[@]}
+	do
+		last=${n/*-/}
+		group=${n/%-$last/}
+		echo $group
+	done | uniq;
+}
+
+groups=`gen_groups`
+
+for grp in ${groups[@]}
+do
+	[ -n "$NL" ] && echo
+	printf "%-20s" $grp
+	for nm in ${names[@]}
+	do
+		striped=${nm/#$grp/}
+		[ "$striped" = "$nm" ] && continue
+		running=0
+		for act in ${active[@]}
+		do
+			if [ "$nm" = "$act" ]; then
+				running=1
+			fi
+		done
+		if [ "$running" = "1" ]; then
+			echo -ne "$C_UP@"
+		else
+			echo -ne "$C_DOWN."
+		fi
+			echo -ne "${nm/*-/}$C_END  "
+	done
+	NL=1
+done
+echo
