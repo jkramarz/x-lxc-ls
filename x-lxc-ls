@@ -1,12 +1,13 @@
 #!/bin/bash
 
 lxcpath=/var/lib/lxc
+autofile=/etc/default/lxc
 C_UP=""
 C_DOWN=""
 C_END=""
 
 case ${TERM} in
-	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
+	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen)
 		C_UP='\e[1;32m'
 		C_DOWN='\e[1;31m'
 		C_END='\e[0m'
@@ -31,6 +32,7 @@ gen_groups() {
 }
 
 groups=`gen_groups`
+autostart=$(cat "$autofile" | grep CONTAINERS | cut -d'=' -f2 | tr -d '"')
 
 for grp in ${groups[@]}
 do
@@ -47,12 +49,26 @@ do
 				running=1
 			fi
 		done
+		auto=0
+		for a in ${autostart[@]}
+		do
+			if [ "$nm" = "$a" ]; then
+				auto=1
+			fi
+		done
+		if [ "$auto" = "1" ]; then
+			echo -n "<"
+		fi
 		if [ "$running" = "1" ]; then
 			echo -ne "$C_UP@"
 		else
 			echo -ne "$C_DOWN."
 		fi
-			echo -ne "${nm/*-/}$C_END  "
+			echo -ne "${nm/*-/}$C_END"
+		if [ "$auto" = "1" ]; then
+			echo -n ">"
+		fi
+		echo -n "   "
 	done
 	NL=1
 done
