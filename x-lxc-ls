@@ -7,7 +7,7 @@ C_DOWN=""
 C_END=""
 
 case ${TERM} in
-	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen)
+	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
 		C_UP='\e[1;32m'
 		C_DOWN='\e[1;31m'
 		C_END='\e[0m'
@@ -22,7 +22,8 @@ active=$(netstat -xa | grep $lxcpath | \
 	sed -e 's#.*'"$lxcpath/"'\(.*\)/command#\1#');
 
 names=$(cd $lxcpath; for id in *;do [ -d "$id" ] && echo $id ; done; cd - >/dev/null)
-gen_groups() {
+gen_groups()
+{
 	for n in ${names[@]}
 	do
 		last=${n/*-/}
@@ -40,32 +41,34 @@ do
 	printf "%-20s" $grp
 	for nm in ${names[@]}
 	do
-		striped=${nm/#$grp/}
-		[ "$striped" = "$nm" ] && continue
+		striped=${nm#$grp}
+		check=${nm/$grp-*-*/}
+		[ "$striped" == "$nm" ] && continue
+		[ "$check" == "" ] && continue
 		running=0
 		for act in ${active[@]}
 		do
-			if [ "$nm" = "$act" ]; then
+			if [ "$nm" == "$act" ]; then
 				running=1
 			fi
 		done
 		auto=0
 		for a in ${autostart[@]}
 		do
-			if [ "$nm" = "$a" ]; then
+			if [ "$nm" == "$a" ]; then
 				auto=1
 			fi
 		done
-		if [ "$auto" = "1" ]; then
+		if [ "$auto" == "1" ]; then
 			echo -n "<"
 		fi
-		if [ "$running" = "1" ]; then
+		if [ "$running" == "1" ]; then
 			echo -ne "$C_UP@"
 		else
 			echo -ne "$C_DOWN."
 		fi
-			echo -ne "${nm/*-/}$C_END"
-		if [ "$auto" = "1" ]; then
+			echo -ne "${nm/$grp-/}$C_END"
+		if [ "$auto" == "1" ]; then
 			echo -n ">"
 		fi
 		echo -n "   "
