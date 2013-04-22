@@ -6,12 +6,14 @@ C_UP=""
 C_DOWN=""
 C_END=""
 
-case ${TERM} in
-	xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
-		C_UP='\e[1;32m'
-		C_DOWN='\e[1;31m'
-		C_END='\e[0m'
-esac
+if [ "-n" != "$1" ]; then
+	case ${TERM} in
+		xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
+			C_UP='\e[1;32m'
+			C_DOWN='\e[1;31m'
+			C_END='\e[0m'
+	esac
+fi
 
 if [ ! -r $lxcpath ]; then
     exit 0
