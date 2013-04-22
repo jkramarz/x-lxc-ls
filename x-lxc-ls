@@ -6,7 +6,7 @@ C_UP=""
 C_DOWN=""
 C_END=""
 
-if [ "-n" != "$1" ]; then
+if [ "-n" != "$1" ] && [ -t 1 ] ; then
 	case ${TERM} in
 		xterm*|rxvt*|Eterm|aterm|kterm|gnome*|interix|screen*)
 			C_UP='\e[1;32m'
