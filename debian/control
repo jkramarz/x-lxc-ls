@@ -1,0 +1,14 @@
+Source: x-lxc-ls
+Section: unknown
+Priority: extra
+Maintainer: Jakub Kramarz (deb packages signing) <jakub.kramarz@zadane.pl>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Vcs-Git: git://github.com/jkramarz/x-lxc-ls.git
+Vcs-Browser: https://github.com/jkramarz/x-lxc-ls
+
+Package: x-lxc-ls
+Architecture: all
+Recommends: lxc
+Description: Utility for listing lxc vms
+  Eye-candy utility for listing LinuX Containers
