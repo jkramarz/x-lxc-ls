@@ -1,5 +1,5 @@
 Source: x-lxc-ls
-Section: unknown
+Section: utils
 Priority: extra
 Maintainer: Jakub Kramarz (deb packages signing) <jakub.kramarz@zadane.pl>
 Build-Depends: debhelper (>= 7.0.50~)
