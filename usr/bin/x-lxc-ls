@@ -43,10 +43,7 @@ do
 	printf "%-20s" $grp
 	for nm in ${names[@]}
 	do
-		striped=${nm#$grp}
-		check=${nm/$grp-*-*/}
-		[ "$striped" == "$nm" ] && continue
-		[ "$check" == "" ] && continue
+		echo $nm | grep -q -E "^${grp}(-|\$)" || continue 
 		running=0
 		for act in ${active[@]}
 		do
