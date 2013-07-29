@@ -23,7 +23,7 @@ fi
 active=$(netstat -xa | grep $lxcpath | \
 	sed -e 's#.*'"$lxcpath/"'\(.*\)/command#\1#');
 
-names=$(find $lxcpath -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+names=$(cd $lxcpath; for id in *;do [ -d "$id" ] && echo $id ; done; cd - >/dev/null)
 gen_groups()
 {
 	for n in ${names[@]}
